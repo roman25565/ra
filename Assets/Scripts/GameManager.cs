@@ -10,7 +10,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GoldUI _goldUI;
     [SerializeField] private Bet _bet;
     [SerializeField] private Button[] buttons;
-    [SerializeField] private AudioSource A;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioSource win;
+    
     private static GameManager _instance;
 
     private Coroutine waintCoroutine;
@@ -65,7 +67,7 @@ public class GameManager : MonoBehaviour
     }
     public void Roll()
     {
-        A.Play();
+        audioSource.Play();
         foreach (var button in buttons)
             button.interactable = false;
         Gold -= Mathf.RoundToInt(_bet.value);
@@ -148,17 +150,19 @@ public class GameManager : MonoBehaviour
                 coroutines.Add(StartCoroutine(ScaleAnimanion(_scrollRectAutoScroll[0].items[results[0]])));
                 coroutines.Add(StartCoroutine(ScaleAnimanion(_scrollRectAutoScroll[1].items[results[1]])));
                 coroutines.Add(StartCoroutine(ScaleAnimanion(_scrollRectAutoScroll[2].items[results[2]])));
+                win.Play();
                 return (int)_bet.value * 8;
-                
             }
             coroutines.Add(StartCoroutine(ScaleAnimanion(_scrollRectAutoScroll[0].items[results[0]])));
             coroutines.Add(StartCoroutine(ScaleAnimanion(_scrollRectAutoScroll[1].items[results[1]])));
-            return (int)_bet.value * 2;
+            win.Play();
+            return (int)_bet.value * 2; 
         }
         else if (resultsType[1] == resultsType[2])
         {
             coroutines.Add(StartCoroutine(ScaleAnimanion(_scrollRectAutoScroll[1].items[results[1]])));
             coroutines.Add(StartCoroutine(ScaleAnimanion(_scrollRectAutoScroll[2].items[results[2]])));
+            win.Play();
             return (int)_bet.value * 2;
         }
         return 0;
